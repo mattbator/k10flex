@@ -1,0 +1,6 @@
+{"_id":{"$oid":"6334bb46c965560ee2b0e25c"},"make":"Trek","model":"Domane SLR","year":2020,"color":"Miami Green","weight":8.2}
+{"_id":{"$oid":"6334bb6ac965560ee2b0e25e"},"make":"Specialized","model":"Tarmac SL7","year":2020,"color":"Starry Night","weight":6.8}
+{"_id":{"$oid":"6334bb83c965560ee2b0e260"},"make":"Eddy Merckx","model":"Molteni Replica","year":1974,"color":"Molteni Orange","weight":9.2}
+{"_id":{"$oid":"6334bb9dc965560ee2b0e262"},"make":"MASHSF","model":"Fixed","year":2021,"color":"Black Rainbow","weight":8.8}
+{"_id":{"$oid":"6334bbaec965560ee2b0e264"},"make":"Specialized","model":"Allez Sprint","year":2019,"color":"Gloss Black/Rocket Red","weight":7.9}
+{"_id":{"$oid":"6334bbc0c965560ee2b0e266"},"make":"Canyon","model":"Spectral 29","year":2021,"color":"Matte Berry/Black","weight":14.5}
