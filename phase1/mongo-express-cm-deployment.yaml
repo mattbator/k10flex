@@ -10,7 +10,7 @@ kind: Deployment
 metadata:
   name: mongo-express-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: lab-app
