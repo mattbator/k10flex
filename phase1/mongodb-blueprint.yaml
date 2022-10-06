@@ -5,17 +5,17 @@ metadata:
 actions:
   backupPrehook:
     phases:
-    - func: KubeExecAll
+    - func: KubeExec
       name: lockMongo
       objects:
         mongoDbSecret:
           kind: Secret
-          name: '{{ .StatefulSet.Name }}'
-          namespace: "{{ .StatefulSet.Namespace }}"        
+          name: mongodb-secret
+          namespace: '{{ .Deployment.Namespace }}'
       args:
-        namespace: "{{ .StatefulSet.Namespace }}"
-        pods: "{{ range .StatefulSet.Pods }} {{.}}{{end}}"
-        containers: "mongodb"
+        namespace: "{{ .Deployment.Namespace }}"
+        pod: "{{ index .Deployment.Pods 0 }}"
+        container: mongodb
         command:
         - bash
         - -o
@@ -24,21 +24,21 @@ actions:
         - pipefail
         - -c
         - |
-          export MONGODB_ROOT_PASSWORD='{{ index .Phases.lockMongo.Secrets.mongoDbSecret.Data "mongodb-root-password" | toString }}'
-          mongosh --authenticationDatabase admin -u root -p "\$MONGODB_ROOT_PASSWORD" --eval="db.fsyncLock()"
+          export MONGODB_ROOT_PASSWORD='{{ index .Phases.lockMongo.Secrets.mongoDbSecret.Data "password" | toString }}'
+          mongosh --authenticationDatabase admin -u root -p "${MONGODB_ROOT_PASSWORD}" --eval="db.fsyncLock()"
   backupPosthook:
     phases:
-    - func: KubeExecAll
+    - func: KubeExec
       name: unlockMongo
       objects:
         mongoDbSecret:
           kind: Secret
-          name: '{{ .StatefulSet.Name }}'
-          namespace: "{{ .StatefulSet.Namespace }}" 
+          name: mongodb-secret
+          namespace: '{{ .Deployment.Namespace }}'
       args:
-        namespace: "{{ .StatefulSet.Namespace }}"
-        pods: "{{ range .StatefulSet.Pods }} {{.}}{{end}}"
-        containers: "mongodb"
+        namespace: "{{ .Deployment.Namespace }}"
+        pod: "{{ index .Deployment.Pods 0 }}"
+        container: mongodb
         command:
         - bash
         - -o
@@ -47,5 +47,5 @@ actions:
         - pipefail
         - -c
         - |
-          export MONGODB_ROOT_PASSWORD='{{ index .Phases.unlockMongo.Secrets.mongoDbSecret.Data "mongodb-root-password" | toString }}'
-          mongosh --authenticationDatabase admin -u root -p "\$MONGODB_ROOT_PASSWORD" --eval="db.fsyncUnlock()"
+          export MONGODB_ROOT_PASSWORD='{{ index .Phases.unlockMongo.Secrets.mongoDbSecret.Data "password" | toString }}'
+          mongosh --authenticationDatabase admin -u root -p "${MONGODB_ROOT_PASSWORD}" --eval="db.fsyncUnlock()"
